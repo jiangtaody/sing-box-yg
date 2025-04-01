@@ -58,13 +58,13 @@ green "你的uuid为: $UUID"
 
 read_reym() {
 yellow "方式一：(推荐)使用Serv00/Hostuno自带域名，不支持proxyip功能：输入回车"
-yellow "方式二：使用CF域名(www.speedtest.net)，支持proxyip+非标端口反代ip功能：输入s"
+yellow "方式二：使用CF域名(time.is)，支持proxyip+非标端口反代ip功能：输入s"
 yellow "方式三：支持其他域名，注意要符合reality域名规则：输入域名"
 reading "请输入reality域名 【请选择 回车 或者 s 或者 输入域名】: " reym
 if [[ -z "$reym" ]]; then
 reym=$USERNAME.${address}
 elif [[ "$reym" == "s" || "$reym" == "S" ]]; then
-reym=www.speedtest.net
+reym=time.is
 fi
 echo "$reym" > $WORKDIR/reym.txt
 reym=$(<$WORKDIR/reym.txt)
@@ -677,9 +677,9 @@ vl_link="vless://$UUID@$IP:$vless_port?encryption=none&flow=xtls-rprx-vision&sec
 echo "$vl_link" > jh.txt
 vmws_link="vmess://$(echo "{ \"v\": \"2\", \"ps\": \"$snb-vmess-ws-$USERNAME\", \"add\": \"$IP\", \"port\": \"$vmess_port\", \"id\": \"$UUID\", \"aid\": \"0\", \"scy\": \"auto\", \"net\": \"ws\", \"type\": \"none\", \"host\": \"\", \"path\": \"/$UUID-vm?ed=2048\", \"tls\": \"\", \"sni\": \"\", \"alpn\": \"\", \"fp\": \"\"}" | base64 -w0)"
 echo "$vmws_link" >> jh.txt
-vmatls_link="vmess://$(echo "{ \"v\": \"2\", \"ps\": \"$snb-vmess-ws-tls-argo-$USERNAME\", \"add\": \"icook.hk\", \"port\": \"8443\", \"id\": \"$UUID\", \"aid\": \"0\", \"scy\": \"auto\", \"net\": \"ws\", \"type\": \"none\", \"host\": \"$argodomain\", \"path\": \"/$UUID-vm?ed=2048\", \"tls\": \"tls\", \"sni\": \"$argodomain\", \"alpn\": \"\", \"fp\": \"\"}" | base64 -w0)"
+vmatls_link="vmess://$(echo "{ \"v\": \"2\", \"ps\": \"$snb-vmess-ws-tls-argo-$USERNAME\", \"add\": \"www.visa.com.hk\", \"port\": \"8443\", \"id\": \"$UUID\", \"aid\": \"0\", \"scy\": \"auto\", \"net\": \"ws\", \"type\": \"none\", \"host\": \"$argodomain\", \"path\": \"/$UUID-vm?ed=2048\", \"tls\": \"tls\", \"sni\": \"$argodomain\", \"alpn\": \"\", \"fp\": \"\"}" | base64 -w0)"
 echo "$vmatls_link" >> jh.txt
-vma_link="vmess://$(echo "{ \"v\": \"2\", \"ps\": \"$snb-vmess-ws-argo-$USERNAME\", \"add\": \"icook.hk\", \"port\": \"8880\", \"id\": \"$UUID\", \"aid\": \"0\", \"scy\": \"auto\", \"net\": \"ws\", \"type\": \"none\", \"host\": \"$argodomain\", \"path\": \"/$UUID-vm?ed=2048\", \"tls\": \"\"}" | base64 -w0)"
+vma_link="vmess://$(echo "{ \"v\": \"2\", \"ps\": \"$snb-vmess-ws-argo-$USERNAME\", \"add\": \"www.visa.com.hk\", \"port\": \"8880\", \"id\": \"$UUID\", \"aid\": \"0\", \"scy\": \"auto\", \"net\": \"ws\", \"type\": \"none\", \"host\": \"$argodomain\", \"path\": \"/$UUID-vm?ed=2048\", \"tls\": \"\"}" | base64 -w0)"
 echo "$vma_link" >> jh.txt
 hy2_link="hysteria2://$UUID@$IP:$hy2_port?security=tls&sni=www.bing.com&alpn=h3&insecure=1#$snb-hy2-$USERNAME"
 echo "$hy2_link" >> jh.txt
@@ -858,7 +858,7 @@ cat > sing_box.json <<EOF
         }
     },
 {
-            "server": "icook.hk",
+            "server": "www.visa.com.hk",
             "server_port": 8443,
             "tag": "vmess-tls-argo-$snb-$USERNAME",
             "tls": {
@@ -885,7 +885,7 @@ cat > sing_box.json <<EOF
             "uuid": "$UUID"
         },
 {
-            "server": "icook.hk",
+            "server": "www.visa.com.hk",
             "server_port": 8880,
             "tag": "vmess-argo-$snb-$USERNAME",
             "tls": {
@@ -1082,7 +1082,7 @@ proxies:
 
 - name: vmess-tls-argo-$snb-$USERNAME                         
   type: vmess
-  server: icook.hk                        
+  server: www.visa.com.hk                        
   port: 8443                                     
   uuid: $UUID       
   alterId: 0
@@ -1098,7 +1098,7 @@ proxies:
 
 - name: vmess-argo-$snb-$USERNAME                         
   type: vmess
-  server: icook.hk                        
+  server: www.visa.com.hk                        
   port: 8880                                     
   uuid: $UUID       
   alterId: 0
@@ -1379,11 +1379,14 @@ if [[ -e $WORKDIR/config.json ]]; then
 yellow "重启中……请稍后……"
 cd $WORKDIR
 ps aux | grep '[r]un -c con' | awk '{print $2}' | xargs -r kill -9 > /dev/null 2>&1
+if [ "$hona" = "serv00" ]; then
+curl -sk "http://${snb}.${USERNAME}.${hona}.net/up" > /dev/null 2>&1
+sleep 5
+else
 sbb=$(cat sb.txt)
 nohup ./"$sbb" run -c config.json >/dev/null 2>&1 &
 sleep 1
-curl -sk "http://${snb}.${USERNAME}.${hona}.net/up" > /dev/null 2>&1
-sleep 5
+fi
 if pgrep -x "$sbb" > /dev/null; then
 green "$sbb 主进程重启成功"
 else
@@ -1399,6 +1402,7 @@ resargo(){
 if [[ -e $WORKDIR/config.json ]]; then
 cd $WORKDIR
 argoport=$(jq -r '.inbounds[4].listen_port' config.json)
+yellow "你可以重置临时隧道; 可以继续使用上回的固定隧道; 也可以更换固定隧道的域名或token"
 argogdshow(){
 echo
 if [ -f ARGO_AUTH_show.log ]; then
@@ -1477,7 +1481,7 @@ menu() {
    echo   "------------------------------------------------------------"
    green  "3. 重启主进程 (修复主节点)"
    echo   "------------------------------------------------------------"
-   green  "4. Argo 临时隧道与固定隧道相互切换"
+   green  "4. Argo重置（临时隧道与固定隧道相互切换、更换固定域名）"
    echo   "------------------------------------------------------------"
    green  "5. 更新脚本"
    echo   "------------------------------------------------------------"
@@ -1547,12 +1551,18 @@ fi
 if [ -f "$WORKDIR/boot.log" ]; then
 argosl=$(cat "$WORKDIR/boot.log" 2>/dev/null | grep -a trycloudflare.com | awk 'NR==2{print}' | awk -F// '{print $2}' | awk '{print $1}')
 checkhttp=$(curl -o /dev/null -s -w "%{http_code}\n" "https://$argosl")
-[[ "$checkhttp" == 404 || "$checkhttp" == 502 ]] && check="域名有效" || check="临时域名暂时无效，如已启用保活，后续会自动恢复有效"
+[[ "$checkhttp" == 404 ]] && check="域名有效" || check="临时域名暂时无效，如已启用保活，后续会自动恢复有效"
 green "Argo临时域名：$argosl  $check"
 else
 argogd=$(cat $WORKDIR/ARGO_DOMAIN.log 2>/dev/null)
 checkhttp=$(curl --max-time 2 -o /dev/null -s -w "%{http_code}\n" "https://$argogd")
-[[ "$checkhttp" == 404 || "$checkhttp" == 502 ]] && check="域名有效" || check="固定域名无效，请检查域名、端口、密钥token是否输入有误"
+if [[ "$checkhttp" == 404 ]]; then
+check="域名有效"
+elif [[ "$argogd" =~ ddns|cloudns|dynamic|cloud-ip ]]; then
+check="域名可能有效，请自行检测argo节点是否可用"
+else
+check="固定域名无效，请检查域名、端口、密钥token是否输入有误"
+fi
 green "Argo固定域名：$argogd $check"
 fi
 if [ "$hona" = "serv00" ]; then
