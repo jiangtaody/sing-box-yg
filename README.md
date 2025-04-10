@@ -29,7 +29,7 @@
 [Sing-box精装桶小白一键脚本（五）：集成oblivion warp免费vpn功能，本地WARP+赛风VPN切换分流(30个国家IP)](https://youtu.be/5Y6NPsYPws0)
 
 ### VPS专用一键脚本如下：快捷方式：```sb```
-### (注意：serv00不可用，请继续往下翻)
+
 ```
 bash <(curl -Ls https://raw.githubusercontent.com/yonggekkk/sing-box-yg/main/sb.sh)
 ```
@@ -46,13 +46,17 @@ bash <(wget -qO- https://raw.githubusercontent.com/yonggekkk/sing-box-yg/main/sb
 
 ### 二、Serv00/Hostuno一键三协议共存脚本（Serv00/Hostuno专用）：
 
+* 目前免费Serv00使用代理脚本有被封账号的风险，收费版Hostuno不受影响，可正常使用
+
 * 切勿与其他Serv00脚本混用！！！
 
 * 修改自Serv00老王sing-box安装脚本，支持一键三协议：vless-reality、vmess-ws(argo)、hysteria2
 
 * 主要增加reality协议默认支持 CF vless/trojan 节点的proxyip以及非标端口的优选反代IP功能
 
-* 支持多功能网页：1、保活(主程序与argo双线独立保活) 2、重启 3、重置端口 4、查看订阅节点
+* 支持多功能网页：1、保活(主程序与argo双线独立保活) 2、重启 3、重置端口 4、查看进程 5、查看订阅节点
+
+* 聚合通用节点分享，支持到22个节点：三协议各自三个IP，argo全覆盖13个端口节点，已添加不死优选IP
 
 #### 相关说明及注意点请查看[甬哥博客说明与Serv00视频教程](https://ygkkk.blogspot.com/2025/01/serv00.html)
 
